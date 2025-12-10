@@ -1,20 +1,24 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Ascend Career Hub Platform
 
-# Run and deploy your AI Studio app
+## Project Overview
+Ascend Career Hub is a comprehensive healthcare workforce platform designed to solve the problem of internal mobility friction. By creating a unified "Passport" for clinical staff and an intelligent "Nudge Engine," it helps healthcare systems retain their best talent by making career advancement visible, accessible, and supported.
 
-This contains everything you need to run your app locally.
+## How to Run the Project
+1. Open the project folder in your terminal.
+2. Ensure you have Node.js and npm installed.
+3. The project is a React-based web application. Use a standard local server or host on platforms like Vercel/Netlify.
+4. For development: `npm install` and then `npm start` (if using a standard CRA/Vite template) or simply open the entry HTML if using a CDN-based approach as configured.
 
-View your app in AI Studio: https://ai.studio/apps/drive/1w_l_QkB6u2NsAjNFur3EM4Al2IdwtWFR
+## The AI Intelligence Layer
+The core differentiator of this platform is the **AI Connective Tissue**.
 
-## Run Locally
+### What the AI Does
+- **Task**: Evaluates user competencies against institutional needs to drive retention.
+- **Inputs**: User certifications, shadow history, unit view counts, and tuition benefit status.
+- **Outputs**: Proactive "Nudges" (Job matches, expiring benefits, milestone encouragement) and manager-side "Intent Signals."
 
-**Prerequisites:**  Node.js
+### Why AI was Chosen
+Conventional job boards are passive. Healthcare workers are too busy to search for their next step. AI was chosen to act as a **proactive career coach**, pushing the right opportunity to the right user at the right time.
 
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+### Improving the Product's Goal
+The goal is to reduce turnover. By alerting a manager when a high-intent internal candidate (who has shadowed their unit) exists, the AI prevents that candidate from looking outside the health system. It turns a "staffing problem" for the manager into a "success story" for the employee.
