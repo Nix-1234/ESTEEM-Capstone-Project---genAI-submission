@@ -1,12 +1,12 @@
 
 import React from 'react';
-import { Card, ProgressBar, Badge, MatchScore } from './shared';
+import { Card, ProgressBar, Badge, Accordion } from './shared';
 import { Employee } from '../types';
-import { CheckCircle2, Award, ArrowRightLeft, Target, Clock, Sparkles } from 'lucide-react';
+import { CheckCircle2, Award, Target, Clock, Sparkles, BookCheck, Info } from 'lucide-react';
 
 export const CompetencyInventory: React.FC<{ employee: Employee }> = ({ employee }) => {
   return (
-    <Card title="Competency Inventory">
+    <Accordion title="Competency Inventory" defaultOpen={true} icon={<BookCheck className="w-5 h-5" />}>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {employee.passport.competencies.map((comp, i) => (
           <div key={i} className="p-3 border border-gray-100 rounded-xl bg-gray-50 flex items-start gap-3">
@@ -21,7 +21,7 @@ export const CompetencyInventory: React.FC<{ employee: Employee }> = ({ employee
           </div>
         ))}
       </div>
-    </Card>
+    </Accordion>
   );
 };
 
@@ -43,9 +43,9 @@ export const PathwayProgress: React.FC<{ employee: Employee }> = ({ employee }) 
           </div>
         </div>
 
-        <div className="relative py-12 px-4">
+        <div className="relative py-12 px-4 overflow-x-auto">
           <div className="absolute top-1/2 left-0 w-full h-1.5 bg-gray-100 -translate-y-1/2"></div>
-          <div className="flex justify-between relative z-10">
+          <div className="flex justify-between relative z-10 min-w-[500px]">
             {steps.map((step, idx) => {
               const isPast = idx < currentIndex;
               const isCurrent = idx === currentIndex;
@@ -68,49 +68,69 @@ export const PathwayProgress: React.FC<{ employee: Employee }> = ({ employee }) 
         </div>
       </Card>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card title="Current Milestones">
-          <div className="space-y-4">
-            {employee.pathway.milestones.map((m, i) => (
-              <div key={i} className="flex items-center gap-4 p-3 border border-gray-50 rounded-xl">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                  m.status === 'complete' ? 'bg-green-50 text-success' : 'bg-amber-50 text-amber'
-                }`}>
-                  {m.status === 'complete' ? <CheckCircle2 className="w-4 h-4" /> : <Clock className="w-4 h-4" />}
-                </div>
-                <div className="flex-1">
-                  <p className="text-xs font-bold text-gray-900">{m.name}</p>
-                  {m.progress !== undefined && <ProgressBar percentage={m.progress} className="mt-2 h-1.5" color="bg-amber" />}
-                </div>
-                <Badge status={m.status}>{m.status}</Badge>
+      <Accordion title="Current Milestones" icon={<Clock className="w-5 h-5" />}>
+        <div className="space-y-4">
+          {employee.pathway.milestones.map((m, i) => (
+            <div key={i} className="flex items-center gap-4 p-3 border border-gray-50 rounded-xl">
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                m.status === 'complete' ? 'bg-green-50 text-success' : 'bg-amber-50 text-amber'
+              }`}>
+                {m.status === 'complete' ? <CheckCircle2 className="w-4 h-4" /> : <Clock className="w-4 h-4" />}
               </div>
-            ))}
-          </div>
-        </Card>
-
-        <Card title="Transferable Skills Map">
-          <div className="space-y-6">
-            {Object.entries(employee.passport.transferableSkillsPercent).map(([role, percent]) => (
-              <div key={role}>
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-xs font-black uppercase text-gray-600">{role} Ready</span>
-                  <span className="text-xs font-bold text-primary">{percent}%</span>
-                </div>
-                <ProgressBar percentage={percent} />
+              <div className="flex-1">
+                <p className="text-xs font-bold text-gray-900">{m.name}</p>
+                {m.progress !== undefined && <ProgressBar percentage={m.progress} className="mt-2 h-1.5" color="bg-amber" />}
               </div>
-            ))}
-            <div className="p-4 bg-primary/5 rounded-xl border border-primary/10 mt-4">
-              <div className="flex items-center gap-2 mb-2">
-                <Sparkles className="w-4 h-4 text-primary" />
-                <p className="text-xs font-bold text-primary">AI INSIGHT</p>
-              </div>
-              <p className="text-[10px] text-gray-600 leading-relaxed">
-                Your Phlebotomy certification and 480 Clinical Hours give you a strong head start on the LPN role. You've already mastered 85% of core entry competencies.
-              </p>
+              <Badge status={m.status}>{m.status}</Badge>
             </div>
+          ))}
+        </div>
+      </Accordion>
+
+      <Accordion title="Transferable Skills Map" icon={<Target className="w-5 h-5" />}>
+        <div className="space-y-6">
+          {Object.entries(employee.passport.transferableSkillsPercent).map(([role, percent]) => (
+            <div key={role}>
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-xs font-black uppercase text-gray-600">{role} Ready</span>
+                <span className="text-xs font-bold text-primary">{percent}%</span>
+              </div>
+              <ProgressBar percentage={percent} />
+            </div>
+          ))}
+          <div className="p-4 bg-primary/5 rounded-xl border border-primary/10 mt-4">
+            <div className="flex items-center gap-2 mb-2">
+              <Sparkles className="w-4 h-4 text-primary" />
+              <p className="text-xs font-bold text-primary">AI INSIGHT</p>
+            </div>
+            <p className="text-[10px] text-gray-600 leading-relaxed">
+              Your Phlebotomy certification and current unit tenure give you a strong head start on patient coordination. You've already mastered 92% of "Patient Relations" core competencies.
+            </p>
           </div>
-        </Card>
-      </div>
+        </div>
+      </Accordion>
+
+      {employee.nrpModules && employee.nrpModules.length > 0 && (
+        <Accordion title="Personalized Onboarding (NRP Modules)" icon={<Sparkles className="w-5 h-5" />}>
+          <div className="space-y-3">
+            <p className="text-xs text-gray-500 mb-4">AI has reviewed your verified competencies to customize your Nurse Residency Program (NRP).</p>
+            {employee.nrpModules.map(mod => (
+              <div key={mod.id} className={`p-4 rounded-xl border flex justify-between items-start ${mod.status === 'eligible-to-skip' ? 'bg-green-50 border-green-100' : 'bg-white border-gray-100'}`}>
+                <div className="flex gap-3">
+                  {mod.status === 'eligible-to-skip' ? <CheckCircle2 className="text-success w-5 h-5 mt-0.5" /> : <Info className="text-primary w-5 h-5 mt-0.5" />}
+                  <div>
+                    <p className="text-sm font-bold text-gray-900">{mod.name}</p>
+                    {mod.reason && <p className="text-[10px] text-gray-500 font-medium italic mt-1">Reason: {mod.reason}</p>}
+                  </div>
+                </div>
+                <Badge status={mod.status === 'eligible-to-skip' ? 'success' : 'pending'}>
+                  {mod.status.replace(/-/g, ' ')}
+                </Badge>
+              </div>
+            ))}
+          </div>
+        </Accordion>
+      )}
     </div>
   );
 };

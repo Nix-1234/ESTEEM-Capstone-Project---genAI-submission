@@ -1,6 +1,6 @@
 
-import React from 'react';
-import { Star } from 'lucide-react';
+import React, { useState } from 'react';
+import { Star, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface CardProps {
   children: React.ReactNode;
@@ -45,7 +45,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
 );
 
 interface BadgeProps {
-  status: 'complete' | 'in-progress' | 'pending' | 'success' | 'warning' | 'danger' | 'info' | 'low' | 'medium' | 'high';
+  status: 'complete' | 'in-progress' | 'pending' | 'success' | 'warning' | 'danger' | 'info' | 'low' | 'medium' | 'high' | 'suggested';
   children: React.ReactNode;
   className?: string;
 }
@@ -62,6 +62,7 @@ export const Badge: React.FC<BadgeProps> = ({ status, children, className = '' }
     low: 'bg-green-50 text-green-600',
     medium: 'bg-amber-50 text-amber-600',
     high: 'bg-red-50 text-red-600',
+    suggested: 'bg-purple-100 text-purple-700 border border-purple-200',
   };
 
   return (
@@ -126,7 +127,31 @@ export const StarRating: React.FC<{ rating: number, total?: number }> = ({ ratin
           className={`w-4 h-4 ${i <= Math.round(rating) ? 'fill-amber text-amber' : 'fill-gray-100 text-gray-200'}`}
         />
       ))}
-      {total && <span className="text-xs text-gray-400 ml-1">({total})</span>}
+      {total !== undefined && <span className="text-xs text-gray-400 ml-1">({total})</span>}
+    </div>
+  );
+};
+
+export const Accordion: React.FC<{ title: string, children: React.ReactNode, defaultOpen?: boolean, icon?: React.ReactNode }> = ({ title, children, defaultOpen = false, icon }) => {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
+
+  return (
+    <div className="border border-gray-100 rounded-xl overflow-hidden mb-4 bg-white shadow-sm">
+      <button 
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors text-left"
+      >
+        <div className="flex items-center gap-3">
+          {icon && <div className="text-primary">{icon}</div>}
+          <span className="font-bold text-gray-900 uppercase tracking-tight text-sm">{title}</span>
+        </div>
+        {isOpen ? <ChevronUp className="w-5 h-5 text-gray-400" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}
+      </button>
+      {isOpen && (
+        <div className="p-4 border-t border-gray-100 animate-in slide-in-from-top-2 duration-200">
+          {children}
+        </div>
+      )}
     </div>
   );
 };

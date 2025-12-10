@@ -1,5 +1,5 @@
 
-export type UserRole = 'employee' | 'manager' | 'executive';
+export type UserRole = 'student' | 'employee' | 'manager' | 'executive';
 
 export interface Competency {
   name: string;
@@ -29,7 +29,6 @@ export interface ShadowHistory {
   minutes?: number;
 }
 
-// Added PathwayStep and Pathway interfaces to fix import errors
 export interface PathwayStep {
   role: string;
   label: string;
@@ -42,14 +41,23 @@ export interface Pathway {
   steps: PathwayStep[];
 }
 
+export interface NRPModule {
+  id: string;
+  name: string;
+  status: 'eligible-to-skip' | 'required' | 'completed';
+  reason?: string;
+}
+
 export interface Employee {
   id: string;
   name: string;
   email: string;
-  role: string;
+  role: UserRole;
   currentPosition: string;
   department: string;
   unit: string;
+  location?: string;
+  healthSystem?: string;
   hireDate: string;
   tenureMonths: number;
   passport: {
@@ -84,13 +92,18 @@ export interface Employee {
   shadowHistory: ShadowHistory[];
   applications: Application[];
   riskLevel: 'low' | 'medium' | 'high';
-  nrpStatus?: {
-    enrolled: boolean;
-    modulesCompleted: number;
-    modulesTotal: number;
-    skippedModules: string[];
-    skipReason: string;
-  };
+  nrpModules: NRPModule[];
+}
+
+export interface UnitReview {
+  id: string;
+  unitId: string;
+  rating: number;
+  comment: string;
+  role: string;
+  date: string;
+  pros: string[];
+  cons: string[];
 }
 
 export interface Unit {
@@ -98,6 +111,8 @@ export interface Unit {
   name: string;
   department: string;
   specialty: string;
+  location: string;
+  healthSystem: string;
   bedCount: number;
   metrics: {
     nursePatientRatio: string;
@@ -137,6 +152,7 @@ export interface Unit {
     virtualTourUrl: string;
     dayInLifeUrl: string;
   };
+  reviews: UnitReview[];
 }
 
 export interface Job {
@@ -145,10 +161,14 @@ export interface Job {
   unitId: string;
   unitName: string;
   department: string;
+  location: string;
+  healthSystem: string;
   shift: string;
   shiftDetails: string;
   openPositions: number;
   type: 'internal' | 'external';
+  isNonClinical?: boolean;
+  isAISuggested?: boolean;
   newGradFriendly: boolean;
   requirements: { name: string; required: boolean; preferred?: boolean }[];
   benefits: string[];
@@ -160,8 +180,8 @@ export interface Job {
     internal: number;
     external: number;
   };
-  // Added matchScore property
-  matchScore?: number;
+  matchScore: number;
+  matchReasons: string[];
 }
 
 export interface NudgeAction {
@@ -178,7 +198,7 @@ export interface Nudge {
   actions: NudgeAction[];
   icon: string;
   color: string;
-  audience?: 'employee' | 'manager' | 'executive';
+  audience?: UserRole;
 }
 
 export interface Department {

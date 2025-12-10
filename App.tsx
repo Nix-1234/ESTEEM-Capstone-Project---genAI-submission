@@ -13,41 +13,42 @@ import { employees, units, jobs, departments } from './data';
 const ViewContainer: React.FC = () => {
   const { role } = useUser();
   const [activeTab, setActiveTab] = useState(
-    role === 'employee' ? 'home' : role === 'manager' ? 'dashboard' : 'roi'
+    role === 'employee' || role === 'student' ? 'home' : role === 'manager' ? 'dashboard' : 'roi'
   );
 
-  const employee = employees[0];
+  // Use student data if role is student
+  const currentUser = role === 'student' ? employees[1] : employees[0];
   const unit = units[0];
 
   const renderContent = () => {
-    if (role === 'employee') {
+    if (role === 'employee' || role === 'student') {
       switch (activeTab) {
         case 'home':
           return (
             <div className="space-y-8">
               <NudgeStack />
-              <PathwayProgress employee={employee} />
+              <PathwayProgress employee={currentUser} />
             </div>
           );
         case 'passport':
           return (
             <div className="space-y-8">
-              <CompetencyInventory employee={employee} />
-              <PathwayProgress employee={employee} />
+              <CompetencyInventory employee={currentUser} />
+              <PathwayProgress employee={currentUser} />
             </div>
           );
         case 'explore':
           return (
              <div className="space-y-8">
-                <JobsBoard jobs={jobs} />
+                <JobsBoard jobs={jobs} role={role} />
                 <UnitProfile unit={unit} />
-                <ShadowHub />
+                <ShadowHub credits={currentUser.shadowCredits.real.remaining} />
              </div>
           );
         case 'support':
           return (
             <div className="space-y-8">
-              <TuitionTracker employee={employee} />
+              {role === 'employee' && <TuitionTracker employee={currentUser} />}
               <LearningHub />
             </div>
           );

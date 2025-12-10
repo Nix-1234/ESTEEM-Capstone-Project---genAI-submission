@@ -2,7 +2,7 @@
 import React from 'react';
 import { useUser } from '../context';
 import { UserRole } from '../types';
-import { Home, UserCircle, Search, Compass, ShieldPlus, Bell, TrendingUp, LayoutDashboard, Users, UsersRound } from 'lucide-react';
+import { Home, UserCircle, Search, Compass, ShieldPlus, Bell, TrendingUp, LayoutDashboard, Users, UsersRound, GraduationCap } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const { role, setRole } = useUser();
@@ -18,7 +18,7 @@ export const Navbar: React.FC = () => {
         </div>
 
         <div className="bg-secondary/40 rounded-full p-1 border border-white/10 hidden lg:flex">
-          {(['employee', 'manager', 'executive'] as UserRole[]).map((r) => (
+          {(['student', 'employee', 'manager', 'executive'] as UserRole[]).map((r) => (
             <button
               key={r}
               onClick={() => setRole(r)}
@@ -48,6 +48,13 @@ export const Navbar: React.FC = () => {
 export const Sidebar: React.FC<{ activeTab: string; setActiveTab: (t: string) => void }> = ({ activeTab, setActiveTab }) => {
   const { role } = useUser();
   
+  const studentItems = [
+    { id: 'home', label: 'Home', icon: Home },
+    { id: 'passport', label: 'My Passport', icon: GraduationCap },
+    { id: 'explore', label: 'Explore Units', icon: Compass },
+    { id: 'support', label: 'Student Support', icon: ShieldPlus },
+  ];
+
   const employeeItems = [
     { id: 'home', label: 'Home', icon: Home },
     { id: 'passport', label: 'My Passport', icon: UserCircle },
@@ -66,7 +73,9 @@ export const Sidebar: React.FC<{ activeTab: string; setActiveTab: (t: string) =>
     { id: 'depts', label: 'Departments', icon: LayoutDashboard },
   ];
 
-  const items = role === 'employee' ? employeeItems : role === 'manager' ? managerItems : executiveItems;
+  const items = role === 'student' ? studentItems : 
+                role === 'employee' ? employeeItems : 
+                role === 'manager' ? managerItems : executiveItems;
 
   return (
     <aside className="w-64 bg-white border-r border-gray-100 h-[calc(100vh-64px)] hidden md:block sticky top-16">
@@ -96,7 +105,7 @@ export const Sidebar: React.FC<{ activeTab: string; setActiveTab: (t: string) =>
 
 export const BottomNav: React.FC<{ activeTab: string; setActiveTab: (t: string) => void }> = ({ activeTab, setActiveTab }) => {
   const { role } = useUser();
-  if (role !== 'employee') return null;
+  if (role !== 'employee' && role !== 'student') return null;
 
   const items = [
     { id: 'home', label: 'Home', icon: Home },
