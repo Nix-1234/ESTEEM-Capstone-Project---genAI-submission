@@ -1,5 +1,8 @@
 # Ascend Career Hub Platform
 
+## Platform Demo
+[Watch the platform demo here](https://drive.google.com/file/d/1aNLo5UxaW1FYx7YXvWRXfLDPAB84nAdA/view?usp=sharing)
+
 ## Project Overview
 Ascend Career Hub is a comprehensive healthcare workforce platform designed to solve the problem of internal mobility friction. By creating a unified "Passport" for clinical staff and an intelligent "Nudge Engine," it helps healthcare systems retain their best talent by making career advancement visible, accessible, and supported.
 
