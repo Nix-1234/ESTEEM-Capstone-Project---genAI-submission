@@ -1,0 +1,113 @@
+
+import React, { useState } from 'react';
+import { UserProvider, NudgeProvider, useUser } from './context';
+import { Navbar, Sidebar, BottomNav } from './components/layout';
+import { NudgeStack } from './components/ai';
+import { CompetencyInventory, PathwayProgress } from './components/passport';
+import { JobsBoard, UnitProfile, ShadowHub } from './components/explore';
+import { TuitionTracker, LearningHub } from './components/support';
+import { InterestedCandidates, TeamPipeline } from './components/manager';
+import { ROIDashboard, DepartmentComparison } from './components/executive';
+import { employees, units, jobs, departments } from './data';
+
+const ViewContainer: React.FC = () => {
+  const { role } = useUser();
+  const [activeTab, setActiveTab] = useState(
+    role === 'employee' ? 'home' : role === 'manager' ? 'dashboard' : 'roi'
+  );
+
+  const employee = employees[0];
+  const unit = units[0];
+
+  const renderContent = () => {
+    if (role === 'employee') {
+      switch (activeTab) {
+        case 'home':
+          return (
+            <div className="space-y-8">
+              <NudgeStack />
+              <PathwayProgress employee={employee} />
+            </div>
+          );
+        case 'passport':
+          return (
+            <div className="space-y-8">
+              <CompetencyInventory employee={employee} />
+              <PathwayProgress employee={employee} />
+            </div>
+          );
+        case 'explore':
+          return (
+             <div className="space-y-8">
+                <JobsBoard jobs={jobs} />
+                <UnitProfile unit={unit} />
+                <ShadowHub />
+             </div>
+          );
+        case 'support':
+          return (
+            <div className="space-y-8">
+              <TuitionTracker employee={employee} />
+              <LearningHub />
+            </div>
+          );
+      }
+    }
+
+    if (role === 'manager') {
+      switch (activeTab) {
+        case 'dashboard':
+          return (
+            <div className="space-y-8">
+              <InterestedCandidates />
+              <TeamPipeline team={employees} />
+            </div>
+          );
+        case 'team':
+          return <TeamPipeline team={employees} />;
+        case 'candidates':
+          return <InterestedCandidates />;
+      }
+    }
+
+    if (role === 'executive') {
+       return (
+          <div className="space-y-8">
+             <ROIDashboard />
+             <DepartmentComparison depts={departments} />
+          </div>
+       );
+    }
+
+    return null;
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 flex">
+      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <main className="flex-1 p-4 md:p-8 max-w-7xl mx-auto pb-24 md:pb-8">
+        <div className="mb-8">
+           <h1 className="text-3xl font-black text-gray-900 capitalize">{activeTab.replace('-', ' ')}</h1>
+           <p className="text-gray-500 font-medium">Ascend Hub • {role.toUpperCase()} CONSOLE</p>
+        </div>
+        {renderContent()}
+      </main>
+      <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} />
+    </div>
+  );
+};
+
+const App: React.FC = () => {
+  return (
+    <UserProvider>
+      <NudgeProvider>
+        <div className="min-h-screen font-['Inter'] selection:bg-primary selection:text-white">
+          <Navbar />
+          <ViewContainer />
+        </div>
+      </NudgeProvider>
+    </UserProvider>
+  );
+};
+
+export default App;
